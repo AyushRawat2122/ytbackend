@@ -22,11 +22,27 @@ const uploadOnCloudinary = async (localFilePath) => {
     console.log("file is uploaded on cloudinary", response.url);
     fs.unlinkSync(localFilePath);
     return response;
-    
   } catch (error) {
     fs.unlinkSync(localFilePath); // remove the locally saved temp file if the upload operation got failed
     return null;
   }
 };
 
-export { uploadOnCloudinary };
+const deleteOnCloudinary = async (publicId) => {
+  try {
+    if(!publicId){
+      return null;
+    }
+
+    const response = await cloudinary.uploader.destroy(publicId, {
+      resource_type: "auto",
+    });
+
+    //file successfully removed from cloudinary
+
+    return response;
+  } catch (error) {
+    return null;
+  }
+};
+export { uploadOnCloudinary, deleteOnCloudinary };
